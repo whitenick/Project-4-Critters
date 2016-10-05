@@ -1,9 +1,9 @@
 /* CRITTERS Main.java
  * EE422C Project 4 submission by
  * Replace <...> with your actual data.
- * <Student1 Name>
- * <Student1 EID>
- * <Student1 5-digit Unique No.>
+ * Nicholas White
+ * NWW295
+ * 16545
  * <Student2 Name>
  * <Student2 EID>
  * <Student2 5-digit Unique No.>
