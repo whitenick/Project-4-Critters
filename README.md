@@ -1,6 +1,5 @@
 # Project-4-Critters
 
-CAN YOU PLEASE RENAME THAT FOLDER TO FIX THE TYPO?
-// it's killing me
+Haha my keyboard got corrupted last week with a software update and the g key thought it was an i. On it
 
 thanks ;a;
