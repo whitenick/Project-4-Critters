@@ -13,7 +13,6 @@
 package assignment4; // cannot be in default package
 import java.util.Scanner;
 import java.io.*;
-import java.lang.Class;
 
 
 /*

@@ -3,7 +3,7 @@
  * Replace <...> with your actual data.
  * Nicholas White
  * NWW295
- * 16545
+ * 16545 
  * <Student2 Name>
  * <Student2 EID>
  * <Student2 5-digit Unique No.>
@@ -13,12 +13,8 @@
 package assignment4;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
-import java.lang.Class;
-import java.util.*;
-
 
 /* see the PDF for descriptions of the methods and fields in this class
  * you may add fields, methods or inner classes to Critter ONLY if you make your additions private
@@ -121,21 +117,6 @@ public abstract class Critter {
 		System.out.println();		
 	}
 	
-
-	/*Implemntation of the Critter collection stage 1 implemenation of a critter squad
-	 *
-	 *
-	 *
-	 *
-	 *
-	 */
-
-	public abstract class CritterWorld extends Critter {
-		public Set<Critter> critterList = new LinkedHashSet<Critter>();
-		public void addToCritterWorld(Critter c) {
-			critterList.add(c);
-		}
-	}
 	/* the TestCritter class allows some critters to "cheat". If you want to 
 	 * create tests of your Critter model, you can create subclasses of this class
 	 * and then use the setter functions contained here. 
