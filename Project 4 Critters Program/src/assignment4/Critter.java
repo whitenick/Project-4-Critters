@@ -56,13 +56,95 @@ public abstract class Critter {
 	private int y_coord;
 	
 	protected final void walk(int direction) {
+		moveFunc(true, direction);
+		
+		energy=-Params.walk_energy_cost;
 	}
 	
 	protected final void run(int direction) {
+		moveFunc(false, direction);
+		
+		energy =- Params.run_energy_cost;
 		
 	}
 	
+	protected final void moveFunc(boolean walk, int direction){
+		if (walk == true) {
+			switch (direction) {
+			case 0: x_coord++;
+					x_coord = x_coord%Params.world_width;
+					break;
+			case 1: x_coord++;
+					x_coord = x_coord%Params.world_width;
+					y_coord--;
+					y_coord = y_coord%Params.world_height;
+					break;
+			case 2: y_coord--;
+					y_coord = y_coord%Params.world_height;
+					break;
+			case 3: x_coord--;
+					x_coord = x_coord%Params.world_width;
+					y_coord--;
+					y_coord = y_coord%Params.world_height;
+					break;
+			case 4: x_coord--;
+					x_coord = x_coord%Params.world_width;
+					break;
+			case 5: x_coord--;
+					x_coord = x_coord%Params.world_width;
+					y_coord++;
+					y_coord = y_coord%Params.world_height;
+					break;
+			case 6: y_coord++;
+					break;
+			case 7: y_coord++;
+					y_coord = y_coord%Params.world_height;
+					x_coord++;
+					x_coord = x_coord%Params.world_width;
+					break;
+			}
+		}
+		else {
+			switch (direction) {
+			case 0: x_coord=+2;
+					x_coord = x_coord%Params.world_width;
+					break;
+			case 1: x_coord=+2;
+					x_coord = x_coord%Params.world_width;
+					y_coord=-2;
+					y_coord = y_coord%Params.world_height;
+					break;
+			case 2: y_coord=-2;
+					y_coord = y_coord%Params.world_height;
+					break;
+			case 3: x_coord=-2;
+					x_coord = x_coord%Params.world_width;
+					y_coord=-2;
+					y_coord = y_coord%Params.world_height;
+					break;
+			case 4: x_coord=-2;
+					x_coord = x_coord%Params.world_width;
+					break;
+			case 5: x_coord=-2;
+					x_coord = x_coord%Params.world_width;
+					y_coord=+2;
+					y_coord = y_coord%Params.world_height;
+					break;
+			case 6: y_coord=+2;
+					y_coord = y_coord%Params.world_height;
+					break;
+			case 7: y_coord+=2;
+					y_coord = y_coord%Params.world_height;
+					x_coord+=2;
+					x_coord = x_coord%Params.world_width;
+					break;
+			}
+		}
+	}
+	
 	protected final void reproduce(Critter offspring, int direction) {
+		moveFunc(true, direction);
+		babies.add(offspring);
 	}
 
 	public abstract void doTimeStep();
@@ -173,10 +255,13 @@ public abstract class Critter {
 	 * Clear the world of all critters, dead and alive
 	 */
 	public static void clearWorld() {
+		population.clear();
 	}
 	
 	public static void worldTimeStep() {
 	}
 	
-	public static void displayWorld() {}
+	public static void displayWorld() {
+		
+	}
 }
