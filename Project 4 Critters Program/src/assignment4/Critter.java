@@ -1,9 +1,9 @@
 /* CRITTERS Critter.java
  * EE422C Project 4 submission by
  * Replace <...> with your actual data.
- * Nicholas White
- * NWW295
- * 16545 
+ * <Student1 Name>
+ * <Student1 EID>
+ * <Student1 5-digit Unique No.>
  * <Student2 Name>
  * <Student2 EID>
  * <Student2 5-digit Unique No.>
@@ -12,9 +12,7 @@
  */
 package assignment4;
 
-import java.io.File;
 import java.util.List;
-import java.util.Scanner;
 
 /* see the PDF for descriptions of the methods and fields in this class
  * you may add fields, methods or inner classes to Critter ONLY if you make your additions private
@@ -41,11 +39,6 @@ public abstract class Critter {
 		rand = new java.util.Random(new_seed);
 	}
 	
-	//Critter document read and prepared for annotation 
-	
-	public static void setFile(Scanner scan){
-		
-	}
 	/* a one-character long string that visually depicts your critter in the ASCII interface */
 	public String toString() { return ""; }
 	
@@ -56,95 +49,12 @@ public abstract class Critter {
 	private int y_coord;
 	
 	protected final void walk(int direction) {
-		moveFunc(true, direction);
-		
-		energy=-Params.walk_energy_cost;
 	}
 	
 	protected final void run(int direction) {
-		moveFunc(false, direction);
-		
-		energy =- Params.run_energy_cost;
-		
 	}
 	
-	protected final void moveFunc(boolean walk, int direction){
-		if (walk == true) {
-			switch (direction) {
-			case 0: x_coord++;
-					x_coord = x_coord%Params.world_width;
-					break;
-			case 1: x_coord++;
-					x_coord = x_coord%Params.world_width;
-					y_coord--;
-					y_coord = y_coord%Params.world_height;
-					break;
-			case 2: y_coord--;
-					y_coord = y_coord%Params.world_height;
-					break;
-			case 3: x_coord--;
-					x_coord = x_coord%Params.world_width;
-					y_coord--;
-					y_coord = y_coord%Params.world_height;
-					break;
-			case 4: x_coord--;
-					x_coord = x_coord%Params.world_width;
-					break;
-			case 5: x_coord--;
-					x_coord = x_coord%Params.world_width;
-					y_coord++;
-					y_coord = y_coord%Params.world_height;
-					break;
-			case 6: y_coord++;
-					break;
-			case 7: y_coord++;
-					y_coord = y_coord%Params.world_height;
-					x_coord++;
-					x_coord = x_coord%Params.world_width;
-					break;
-			}
-		}
-		else {
-			switch (direction) {
-			case 0: x_coord=+2;
-					x_coord = x_coord%Params.world_width;
-					break;
-			case 1: x_coord=+2;
-					x_coord = x_coord%Params.world_width;
-					y_coord=-2;
-					y_coord = y_coord%Params.world_height;
-					break;
-			case 2: y_coord=-2;
-					y_coord = y_coord%Params.world_height;
-					break;
-			case 3: x_coord=-2;
-					x_coord = x_coord%Params.world_width;
-					y_coord=-2;
-					y_coord = y_coord%Params.world_height;
-					break;
-			case 4: x_coord=-2;
-					x_coord = x_coord%Params.world_width;
-					break;
-			case 5: x_coord=-2;
-					x_coord = x_coord%Params.world_width;
-					y_coord=+2;
-					y_coord = y_coord%Params.world_height;
-					break;
-			case 6: y_coord=+2;
-					y_coord = y_coord%Params.world_height;
-					break;
-			case 7: y_coord+=2;
-					y_coord = y_coord%Params.world_height;
-					x_coord+=2;
-					x_coord = x_coord%Params.world_width;
-					break;
-			}
-		}
-	}
-	
-	protected final void reproduce(Critter offspring, int direction) {
-		moveFunc(true, direction);
-		babies.add(offspring);
+	protected final void reproduce(Critter offspring, int direction){
 	}
 
 	public abstract void doTimeStep();
@@ -161,6 +71,16 @@ public abstract class Critter {
 	 * @throws InvalidCritterException
 	 */
 	public static void makeCritter(String critter_class_name) throws InvalidCritterException {
+		try {
+			String critterClass = myPackage + "." + critter_class_name;
+			Critter obj = (Critter) Class.forName(critterClass).newInstance();
+			obj.x_coord = getRandomInt(Params.world_width);
+			obj.y_coord = getRandomInt(Params.world_height);
+			obj.energy = Params.start_energy;
+			population.add(obj);
+		} catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	/**
@@ -171,7 +91,7 @@ public abstract class Critter {
 	 */
 	public static List<Critter> getInstances(String critter_class_name) throws InvalidCritterException {
 		List<Critter> result = new java.util.ArrayList<Critter>();
-	
+		
 		return result;
 	}
 	
@@ -255,13 +175,57 @@ public abstract class Critter {
 	 * Clear the world of all critters, dead and alive
 	 */
 	public static void clearWorld() {
-		population.clear();
+	}
+	
+	private static void handleFight(Critter a, Critter b){
+		int aOldX = a.x_coord;
+		int aOldY = a.y_coord;
+		
+		int bOldX = b.x_coord;
+		int bOldY = b.y_coord;
+		
+		boolean aFight = a.fight(b.toString());
+		boolean bFight = b.fight(a.toString());
+		
+		if(!aFight){
+			
+		}
+		
+		if(aFight && bFight){
+			
+		}
 	}
 	
 	public static void worldTimeStep() {
+		for(int i = 0; i<population.size(); i++){
+			Critter thisCritter = population.get(i);
+			thisCritter.doTimeStep();
+		}
+		
+		for(int i = 0; i<population.size(); i++){
+			Critter aCritter = population.get(i);
+			for(int j = 0; j<population.size(); j++){
+				if(i != j){
+					Critter bCritter = population.get(j);
+					if((aCritter.x_coord == bCritter.x_coord) 
+					&& (aCritter.y_coord == bCritter.y_coord)){
+						//TODO: Make critters fight, remove a dead critter, continue to fight
+						handleFight(aCritter, bCritter);
+					}
+				}
+			}
+		}
+		
+		population.addAll(babies);
+		
+		for(int i = 0; i<population.size(); i++){
+			Critter thisCritter = population.get(i);
+			thisCritter.energy -= Params.rest_energy_cost;
+			if(thisCritter.energy <= 0){
+				population.remove(i);
+			}
+		}
 	}
 	
-	public static void displayWorld() {
-		
-	}
+	public static void displayWorld() {}
 }

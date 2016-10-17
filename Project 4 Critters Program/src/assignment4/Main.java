@@ -1,19 +1,18 @@
- /* CRITTERS Main.java
+/* CRITTERS Main.java
  * EE422C Project 4 submission by
- * Replace <...> with your actual data.
- * Nicholas White
- * NWW295
- * 16545
+ * Javier Cortes
+ * jc74593
+ * 16445
  * <Student2 Name>
  * <Student2 EID>
  * <Student2 5-digit Unique No.>
  * Slip days used: <0>
  * Fall 2016
  */
+
 package assignment4; // cannot be in default package
 import java.util.Scanner;
 import java.io.*;
-import java.util.*;
 
 
 /*
@@ -66,71 +65,11 @@ public class Main {
         } else { // if no arguments to main
             kb = new Scanner(System.in); // use keyboard and console
         }
-       
 
         /* Do not alter the code above for your submission. */
         /* Write your code below. */
         
-        String input = null;
-        int step = 0;
-        List<Critter> statList = new ArrayList<Critter>();
-        Scanner inputString = new Scanner(input);
-        while(DEBUG == true) {
-        	System.out.print("critters> ");
-        	input = kb.nextLine();
-        	while(inputString.hasNext()){
-        		if(inputString.next() == "quit"){
-        			DEBUG = false;
-        		}
-        		else if(inputString.next() == "show") {
-        			Critter.displayWorld();
-        		}
-        		else if(inputString.next() == "step") {
-        			if (inputString.hasNextInt()) {
-        				step = inputString.nextInt();
-        				while (step > 0) {
-        					Critter.worldTimeStep();
-        					step--;
-        				}
-        			}
-        			else Critter.worldTimeStep();
-        		}
-        		else if(inputString.next() == "seed") {
-        			int number = 0;
-        			if (inputString.hasNextInt()) {
-        				number = inputString.nextInt();
-        				Critter.setSeed(number);
-        			}
-        		}
-        		else if(inputString.next() == "make") {
-        			String inVal = null;
-        			int number = 0;
-        			if (inputString.hasNext()) {
-        				inVal = inputString.next();
-        				if (inputString.hasNextInt()) {
-            				number = inputString.nextInt();
-            				while(number > 0) {
-            					Critter.makeCritter(inVal);
-            				}
-            			}
-        				else Critter.makeCritter(inVal);
-        			}
-        		}
-        		else if(inputString.next() == "stats") {
-        			String inVal = null;
-        			statList = Critter.getInstances(inVal);
-        			Critter.runStats(statList);
-        		}
-        	}
-        	
-        	
-        }
-        
         System.out.println("GLHF");
-        
-        //Nick
-        
-        System.out.println("Nick");
         
         /* Write your code above */
         System.out.flush();
