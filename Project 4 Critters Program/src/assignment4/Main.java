@@ -13,6 +13,7 @@
 package assignment4; // cannot be in default package
 import java.util.Scanner;
 import java.io.*;
+import java.util.*;
 
 
 /*
@@ -68,6 +69,101 @@ public class Main {
 
         /* Do not alter the code above for your submission. */
         /* Write your code below. */
+        
+        //Code for accepting input on command prompt
+        
+        DEBUG = true;
+        
+        while(DEBUG == true) {
+        	List<Critter> critterList = new ArrayList<Critter>();
+        	System.out.println("critters> ");
+        	String input = kb.nextLine();
+        	int count = 0;
+        	int seed = 0;
+        	String className = null;
+        	Scanner inputScan = new Scanner (input);
+        	
+        	if(inputScan.hasNext()) {
+        		if(inputScan.next() == "quit") {
+        			DEBUG = false;
+        		}
+        	}
+        	
+        	else if(inputScan.hasNext()) {
+        		if(inputScan.next() == "show") {
+        			Critter.displayWorld();
+        		}
+        	}
+        	
+        	else if(inputScan.hasNext()) {
+        		if(inputScan.next() == "step") {
+        			if(inputScan.hasNextInt()) {
+        				count = inputScan.nextInt();
+        				for(int i = 0; i<count; i++) {
+        					Critter.worldTimeStep();
+        				}
+        			}
+        			else {
+        				Critter.worldTimeStep();
+        			}
+        		}
+        	}
+        	
+        	else if(inputScan.hasNext()) {
+        		if(inputScan.next() == "seed") {
+        			if(inputScan.hasNextInt()) {
+        				seed = inputScan.nextInt();
+        			}
+        		}
+        	}
+        	
+        	else if(inputScan.hasNext()) {
+        		if(inputScan.next() == "make") {
+        			if(inputScan.hasNext()) {
+        				className = inputScan.next();
+        				if(inputScan.hasNextInt()) {
+        					count = inputScan.nextInt();
+        				}
+        				if (count>0) {
+        					for(int i = 0; i<count; i++) {
+        						try {
+									Critter.makeCritter(className);
+								} catch (InvalidCritterException e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								}
+        					}
+        				}
+        				else {
+        					try {
+								Critter.makeCritter(className);
+							} catch (InvalidCritterException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+        				}
+        			
+        			}
+        			
+        		}
+        	}
+        	
+        	else if(inputScan.hasNext()) {
+        		if(inputScan.next() == "stats") {
+        			if(inputScan.hasNext()) {
+        				className = inputScan.next();
+        				try {
+							critterList = Critter.getInstances(className);
+						} catch (InvalidCritterException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+        			}
+        		}
+        	}
+        	
+       
+        }
         
         System.out.println("GLHF");
         
