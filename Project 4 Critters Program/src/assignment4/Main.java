@@ -76,7 +76,7 @@ public class Main {
         
         while(DEBUG == true) {
         	List<Critter> critterList = new ArrayList<Critter>();
-        	System.out.println("critters> ");
+        	System.out.print("critters> ");
         	String input = kb.nextLine();
         	int count = 0;
         	int seed = 0;
@@ -85,19 +85,20 @@ public class Main {
 
         	
         	if(inputScan.hasNext()) {
-        		if(inputScan.next().equals("quit")) {
+        		if(inputScan.hasNext("quit")) {
         			DEBUG = false;
         		}
         	
         	
         	
-        		else if(inputScan.next().equals("show")) {
+        		else if(inputScan.hasNext("show")) {
         			Critter.displayWorld();
         		}
         	
         	
         	
-        		else if(inputScan.next().equals("step")) {
+        		else if(inputScan.hasNext("step")) {
+        			inputScan.next();
         			if(inputScan.hasNextInt()) {
         				count = inputScan.nextInt();
         				for(int i = 0; i<count; i++) {
@@ -111,7 +112,8 @@ public class Main {
         	
         	
         	
-        		else if(inputScan.next().equals("seed")) {
+        		else if(inputScan.hasNext("seed")) {
+        			inputScan.next();
         			if(inputScan.hasNextInt()) {
         				seed = inputScan.nextInt();
         			}
@@ -119,7 +121,8 @@ public class Main {
         	
         	
         	
-        		else if(inputScan.next().equals("make")) {
+        		else if(inputScan.hasNext("make")) {
+        			inputScan.next();
         			if(inputScan.hasNext()) {
         				className = inputScan.next();
         				if(inputScan.hasNextInt()) {
@@ -149,7 +152,8 @@ public class Main {
         		}
         	
         	
-        		else if(inputScan.next().equals("stats")) {
+        		else if(inputScan.hasNext("stats")) {
+        			inputScan.next();
         			if(inputScan.hasNext()) {
         				className = inputScan.next();
         				try {
@@ -160,8 +164,12 @@ public class Main {
 						}
         			}
         		}
+        		
+        		else System.out.println("Invalid input: Try Again");
         	
         	}
+        	
+        	else System.out.println("Invalid input: Try Again");
         	
        
         }
