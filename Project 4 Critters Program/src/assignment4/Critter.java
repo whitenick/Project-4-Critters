@@ -53,12 +53,44 @@ public abstract class Critter {
 	private int y_coord;
 	
 	protected final void walk(int direction) {
+		makeMov(direction);
+		energy =- Params.walk_energy_cost;
 	}
 	
 	protected final void run(int direction) {
+		makeMov(direction);
+		makeMov(direction);
+		energy =- Params.run_energy_cost;
+	}
+	
+	protected final void makeMov(int direction) {
+		switch (direction) {
+		case 0: x_coord++;
+				break;
+		case 1: x_coord++;
+				y_coord--;
+				break;
+		case 2: y_coord--;
+				break;
+		case 3: y_coord--;
+				x_coord--;
+				break;
+		case 4: x_coord--;
+				break;
+		case 5: y_coord++;
+				x_coord--;
+				break;
+		case 6: y_coord++;
+				break;
+		case 7: x_coord++;
+				y_coord++;
+				break;
+		}
 	}
 	
 	protected final void reproduce(Critter offspring, int direction){
+		makeMov(direction);
+		babies.add(offspring);
 	}
 
 	public abstract void doTimeStep();
