@@ -82,21 +82,22 @@ public class Main {
         	int seed = 0;
         	String className = null;
         	Scanner inputScan = new Scanner (input);
+
         	
         	if(inputScan.hasNext()) {
-        		if(inputScan.next() == "quit") {
+        		if(inputScan.next().equals("quit")) {
         			DEBUG = false;
         		}
-        	}
         	
-        	else if(inputScan.hasNext()) {
-        		if(inputScan.next() == "show") {
+        	
+        	
+        		else if(inputScan.next().equals("show")) {
         			Critter.displayWorld();
         		}
-        	}
         	
-        	else if(inputScan.hasNext()) {
-        		if(inputScan.next() == "step") {
+        	
+        	
+        		else if(inputScan.next().equals("step")) {
         			if(inputScan.hasNextInt()) {
         				count = inputScan.nextInt();
         				for(int i = 0; i<count; i++) {
@@ -107,18 +108,18 @@ public class Main {
         				Critter.worldTimeStep();
         			}
         		}
-        	}
         	
-        	else if(inputScan.hasNext()) {
-        		if(inputScan.next() == "seed") {
+        	
+        	
+        		else if(inputScan.next().equals("seed")) {
         			if(inputScan.hasNextInt()) {
         				seed = inputScan.nextInt();
         			}
         		}
-        	}
         	
-        	else if(inputScan.hasNext()) {
-        		if(inputScan.next() == "make") {
+        	
+        	
+        		else if(inputScan.next().equals("make")) {
         			if(inputScan.hasNext()) {
         				className = inputScan.next();
         				if(inputScan.hasNextInt()) {
@@ -146,10 +147,9 @@ public class Main {
         			}
         			
         		}
-        	}
         	
-        	else if(inputScan.hasNext()) {
-        		if(inputScan.next() == "stats") {
+        	
+        		else if(inputScan.next().equals("stats")) {
         			if(inputScan.hasNext()) {
         				className = inputScan.next();
         				try {
@@ -160,6 +160,7 @@ public class Main {
 						}
         			}
         		}
+        	
         	}
         	
        
