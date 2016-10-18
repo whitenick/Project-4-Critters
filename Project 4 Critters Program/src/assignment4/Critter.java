@@ -315,26 +315,31 @@ public abstract class Critter {
 	}
 	
 	private static void printRow(int row){
-		Critter critter;
+		Critter critter = null;
 		int critterIndex = -1;
-		int critterX = 0;
+		int critterX = -1;
 		int i = 0;
+		
+		critterIndex = findNextCritter(row, critterIndex);
+		if(critterIndex != -1){
+			critter = population.get(critterIndex);
+			critterX = population.get(critterIndex).x_coord;
+		}
 		
 		System.out.print("|");
 		while(i < Params.world_width){
-			critterIndex = findNextCritter(row, critterIndex);
+			System.out.print(" ");
 			
-			if(critterIndex != -1){
-				critter = population.get(critterIndex);
-				critterX = critter.x_coord;
-				
-				int j = i;
-				while(j < critterX){
-					System.out.print(" ");
-					j++;
-					i++;
-				}
+			
+			if(i == critterX){
 				System.out.print(critter);
+				
+				critterIndex = findNextCritter(row, critterIndex);
+				if(critterIndex != -1){
+					critter = population.get(critterIndex);
+					critterX = population.get(critterIndex).x_coord;
+				}
+				i++;
 			}
 			
 			i++;
@@ -358,5 +363,6 @@ public abstract class Critter {
 		System.out.print("+");
 		printRBorder();
 		System.out.print("+");
+		System.out.println();
 	}
 }
