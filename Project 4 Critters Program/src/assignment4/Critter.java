@@ -54,13 +54,13 @@ public abstract class Critter {
 	
 	protected final void walk(int direction) {
 		makeMov(direction);
-		energy =- Params.walk_energy_cost;
+		energy -= Params.walk_energy_cost;
 	}
 	
 	protected final void run(int direction) {
 		makeMov(direction);
 		makeMov(direction);
-		energy =- Params.run_energy_cost;
+		energy -= Params.run_energy_cost;
 	}
 	
 	protected final void makeMov(int direction) {
