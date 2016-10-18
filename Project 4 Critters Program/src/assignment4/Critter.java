@@ -265,3 +265,5 @@ public abstract class Critter {
 	
 	public static void displayWorld() {}
 }
+
+//nickwhite
