@@ -24,6 +24,10 @@ public abstract class Critter {
 	private static String myPackage;
 	private	static List<Critter> population = new java.util.ArrayList<Critter>();
 	private static List<Critter> babies = new java.util.ArrayList<Critter>();
+	
+	private static List<Integer> xCoor = new java.util.ArrayList<Integer>();
+	private static List<Integer> yCoor = new java.util.ArrayList<Integer>();
+
 
 	// Gets the package name.  This assumes that Critter and its subclasses are all in the same package.
 	static {
@@ -109,9 +113,13 @@ public abstract class Critter {
 			obj.x_coord = getRandomInt(Params.world_width);
 			obj.y_coord = getRandomInt(Params.world_height);
 			obj.energy = Params.start_energy;
+			
+			xCoor.add(obj.x_coord);
+			yCoor.add(obj.y_coord);
 			population.add(obj);
 		} catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
 			e.printStackTrace();
+			throw new InvalidCritterException(critter_class_name);
 		}
 	}
 	
@@ -122,11 +130,12 @@ public abstract class Critter {
 	 * @throws InvalidCritterException
 	 */
 	public static List<Critter> getInstances(String critter_class_name) throws InvalidCritterException {
-		
-		
 		List<Critter> result = new java.util.ArrayList<Critter>();
-		
-		
+		String critterClass = myPackage + "." + critter_class_name;
+		for(int i = 0; i < population.size(); i++){
+			Critter critter = population.get(i);
+			
+		}
 		
 		return result;
 	}
@@ -227,8 +236,38 @@ public abstract class Critter {
 			
 		}
 		
-		if(aFight && bFight){
+		if((a.x_coord == b.x_coord) && (a.y_coord == b.y_coord)){
+			int aRoll;
+			int bRoll;
 			
+			if(aFight){
+				aRoll = getRandomInt(a.energy);
+			}else
+				aRoll = 0;
+			
+			if(bFight){
+				bRoll = getRandomInt(b.energy);
+			}else
+				bRoll = 0;
+			
+			if(aRoll > bRoll){
+				a.energy += b.energy/2;
+				population.remove(b);
+			}
+			else if(bRoll > aRoll){
+				b.energy += a.energy/2;
+				population.remove(a);
+			}
+			else if(aRoll == bRoll){
+				int ran = getRandomInt(2);
+				if(ran == 0){
+					a.energy += b.energy/2;
+					population.remove(b);
+				}else{
+					b.energy += a.energy/2;
+					population.remove(a);
+				}
+			}
 		}
 	}
 	
@@ -258,12 +297,72 @@ public abstract class Critter {
 			Critter thisCritter = population.get(i);
 			thisCritter.energy -= Params.rest_energy_cost;
 			if(thisCritter.energy <= 0){
+				xCoor.remove(i);
+				yCoor.remove(i);
 				population.remove(i);
 			}
 		}
 	}
 	
-	public static void displayWorld() {}
+	private static void printRBorder(){
+		for(int i = 0; i < Params.world_width; i++){
+			System.out.print("-");
+		}
+	}
+	
+	private static int findNextCritter(int row, int critterIndex){
+		return yCoor.subList(critterIndex+1, yCoor.size()).indexOf(row);
+	}
+	
+	private static void printRow(int row){
+		Critter critter = null;
+		int critterIndex = -1;
+		int critterX = -1;
+		int i = 0;
+		
+		critterIndex = findNextCritter(row, critterIndex);
+		if(critterIndex != -1){
+			critter = population.get(critterIndex);
+			critterX = population.get(critterIndex).x_coord;
+		}
+		
+		System.out.print("|");
+		while(i < Params.world_width){
+			System.out.print(" ");
+			
+			
+			if(i == critterX){
+				System.out.print(critter);
+				
+				critterIndex = findNextCritter(row, critterIndex);
+				if(critterIndex != -1){
+					critter = population.get(critterIndex);
+					critterX = population.get(critterIndex).x_coord;
+				}
+				i++;
+			}
+			
+			i++;
+		}
+		System.out.print("|");
+	}
+	
+	public static void displayWorld() {
+		System.out.print("+");
+		printRBorder();
+		System.out.print("+");
+		
+		System.out.println();
+		int row = 0;
+		while(row < Params.world_height){
+			printRow(row);
+			System.out.println();
+			row ++;
+		}
+		
+		System.out.print("+");
+		printRBorder();
+		System.out.print("+");
+		System.out.println();
+	}
 }
-
-//nickwhite
