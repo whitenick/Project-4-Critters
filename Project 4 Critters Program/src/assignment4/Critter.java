@@ -66,24 +66,36 @@ public abstract class Critter {
 	protected final void makeMov(int direction) {
 		switch (direction) {
 		case 0: x_coord++;
+				x_coord = x_coord%Params.world_width;
 				break;
 		case 1: x_coord++;
+				x_coord = x_coord%Params.world_width;
 				y_coord--;
+				y_coord = y_coord%Params.world_height;
 				break;
 		case 2: y_coord--;
+				y_coord = y_coord%Params.world_height;
 				break;
 		case 3: y_coord--;
+				y_coord = y_coord%Params.world_height;
 				x_coord--;
+				x_coord = x_coord%Params.world_width;
 				break;
 		case 4: x_coord--;
+				x_coord = x_coord%Params.world_width;
 				break;
 		case 5: y_coord++;
+				y_coord = y_coord%Params.world_height;
 				x_coord--;
+				x_coord = x_coord%Params.world_width;
 				break;
 		case 6: y_coord++;
+				y_coord = y_coord%Params.world_height;
 				break;
 		case 7: x_coord++;
+				x_coord = x_coord%Params.world_width;
 				y_coord++;
+				y_coord = y_coord%Params.world_height;
 				break;
 		}
 	}
