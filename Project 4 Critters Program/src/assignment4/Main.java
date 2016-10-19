@@ -80,6 +80,7 @@ public class Main {
         	String input = kb.nextLine();
         	int count = 0;
         	int seed = 0;
+        	//DEBUG for critter count
         	String className = null;
         	Scanner inputScan = new Scanner (input);
 
@@ -158,6 +159,10 @@ public class Main {
         				className = inputScan.next();
         				try {
 							critterList = Critter.getInstances(className);
+							//Debug for critterList
+//							for(int i = 0; i<critterList.size(); i++) {
+//								System.out.println(critterList.get(i).toString());
+//							}
 						} catch (InvalidCritterException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
