@@ -70,38 +70,35 @@ public abstract class Critter {
 	protected final void makeMov(int direction) {
 		switch (direction) {
 		case 0: x_coord++;
-				x_coord = x_coord%Params.world_width;
 				break;
 		case 1: x_coord++;
-				x_coord = x_coord%Params.world_width;
 				y_coord--;
-				y_coord = y_coord%Params.world_height;
 				break;
 		case 2: y_coord--;
-				y_coord = y_coord%Params.world_height;
 				break;
 		case 3: y_coord--;
-				y_coord = y_coord%Params.world_height;
 				x_coord--;
-				x_coord = x_coord%Params.world_width;
 				break;
 		case 4: x_coord--;
-				x_coord = x_coord%Params.world_width;
 				break;
 		case 5: y_coord++;
-				y_coord = y_coord%Params.world_height;
 				x_coord--;
-				x_coord = x_coord%Params.world_width;
 				break;
 		case 6: y_coord++;
-				y_coord = y_coord%Params.world_height;
 				break;
 		case 7: x_coord++;
-				x_coord = x_coord%Params.world_width;
 				y_coord++;
-				y_coord = y_coord%Params.world_height;
 				break;
 		}
+		if(x_coord < 0){
+			x_coord += Params.world_width;
+		}
+		if(y_coord < 0){
+			y_coord += Params.world_height;
+		}
+		x_coord %= Params.world_width;
+		y_coord %= Params.world_height;
+		
 	}
 	
 	protected final void reproduce(Critter offspring, int direction){
@@ -376,36 +373,97 @@ public abstract class Critter {
 		}
 	}
 	
-	private static int findNextCritter(int row, int critterIndex){
-		return yCoor.subList(critterIndex+1, yCoor.size()).indexOf(row);
+	private static List<Critter> purgeRow(List<Critter> row){
+		List<Integer> removeList = new java.util.ArrayList<Integer>();
+		for(int i = 0; i < row.size(); i++){
+			Critter crit = row.get(i);
+			for(int j = i+1; j < row.size(); j++){
+				Critter nCrit = row.get(j);
+				if(crit.x_coord == nCrit.x_coord){
+					removeList.add(j);
+				}
+			}
+			
+			for(int k = 0; k < removeList.size(); k++){
+				row.remove(removeList.get(k));
+			}
+			
+		}
+		
+		return row;
+	}
+	
+	private static List<Critter> findRow(int row){
+		List<Critter> rowList = new java.util.ArrayList<Critter>();
+		
+		for(int i = 0; i < yCoor.size(); i++){
+			if(yCoor.get(i) == row){
+				rowList.add(population.get(i));
+			}
+		}
+		
+		return rowList;
+	}
+	
+	private static Critter nextCritter(List<Critter> row){
+		Critter tempCrit = null;
+		if(row.size() > 0){
+			int tempIndex = 0;
+			tempCrit = row.get(tempIndex);
+			
+			for(int i = 0; i < row.size(); i++){
+				if(row.get(i).x_coord < tempCrit.x_coord){
+					tempIndex = i;
+					tempCrit = row.get(tempIndex);
+				}
+			}
+			
+			row.remove(tempIndex);
+		}
+		return tempCrit;
 	}
 	
 	private static void printRow(int row){
 		Critter critter = null;
-		int critterIndex = -1;
+		List<Critter> crittersRow = new java.util.ArrayList<Critter>();
 		int critterX = -1;
 		int i = 0;
 		
-		critterIndex = findNextCritter(row, critterIndex);
-		if(critterIndex != -1){
-			critter = population.get(critterIndex);
-			critterX = population.get(critterIndex).x_coord;
+		crittersRow = findRow(row);
+		crittersRow = purgeRow(crittersRow);
+		critter = nextCritter(crittersRow);
+		if(critter != null){
+			critterX = critter.x_coord;
 		}
 		
 		System.out.print("|");
 		while(i < Params.world_width){
-			System.out.print(" ");
-			
 			
 			if(i == critterX){
 				System.out.print(critter);
 				
-				critterIndex = findNextCritter(row, critterIndex);
-				if(critterIndex != -1){
-					critter = population.get(critterIndex);
-					critterX = population.get(critterIndex).x_coord;
-				}
+				critter = nextCritter(crittersRow);
+				if(critter != null){
+					critterX = critter.x_coord;
+				}else
+					critterX = Params.world_width;
+				
 				i++;
+			}
+			else if(i > critterX){
+				critter = nextCritter(crittersRow);
+				if(critter != null){
+					critterX = critter.x_coord;
+				}
+				
+				if(i == critterX){
+					System.out.print(critter);
+					i++;
+				}
+			}
+			
+			if(i < Params.world_width){
+				System.out.print(" ");
 			}
 			
 			i++;
@@ -425,7 +483,7 @@ public abstract class Critter {
 			System.out.println();
 			row ++;
 		}
-		
+		 
 		System.out.print("+");
 		printRBorder();
 		System.out.print("+");
