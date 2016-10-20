@@ -14,6 +14,7 @@ package assignment4;
 
 import java.util.List;
 import java.lang.*;
+import java.lang.Exception;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
@@ -30,7 +31,8 @@ public abstract class Critter {
 	
 	private static List<Integer> xCoor = new java.util.ArrayList<Integer>();
 	private static List<Integer> yCoor = new java.util.ArrayList<Integer>();
-
+	
+	private static int indexA, indexB, indexAll = 0;
 
 	// Gets the package name.  This assumes that Critter and its subclasses are all in the same package.
 	static {
@@ -40,6 +42,10 @@ public abstract class Critter {
 	private static java.util.Random rand = new java.util.Random();
 	public static int getRandomInt(int max) {
 		return rand.nextInt(max);
+	}
+	
+	public static List<Critter> runPopulation() {
+		return population;
 	}
 	
 	public static void setSeed(long new_seed) {
@@ -144,7 +150,6 @@ public abstract class Critter {
 			yCoor.add(obj.y_coord);
 			population.add(obj);
 		} catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
-			e.printStackTrace();
 			throw new InvalidCritterException(critter_class_name);
 		}
 	}
@@ -152,14 +157,14 @@ public abstract class Critter {
 	/**
 	 * Gets a list of critters of a specific type.
 	 * @param critter_class_name What kind of Critter is to be listed.  Unqualified class name.
-	 * @return List of Critters.
-	 * @throws InvalidCritterException
+	 * @return List of Critters. 
 	 */
-	public static List<Critter> getInstances(String critter_class_name) throws InvalidCritterException {
+	public static List<Critter> getInstances(String critter_class_name) throws InvalidCritterException  {
 		List<Critter> result = new java.util.ArrayList<Critter>();
 		String critterClass = myPackage + "." + critter_class_name;
 		try {
-			Critter obj = (Critter) Class.forName(critterClass).newInstance();
+			Class crits = Class.forName(critterClass);
+			Critter obj = (Critter) crits.newInstance();
 			for(int i = 0; i < population.size(); i++){
 				Critter critter = population.get(i);
 				if(critter.toString().equals(obj.toString())) {
@@ -172,27 +177,34 @@ public abstract class Critter {
 				try {
 					craigMethod.invoke(obj, result);
 				} catch (IllegalArgumentException | InvocationTargetException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					throw new InvalidCritterException(critter_class_name);
 				}
 			} catch (NoSuchMethodException | SecurityException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				throw new InvalidCritterException(critter_class_name);
 			}
 			
-			runStats(population);
+			//runStats(population);
 			//c.craigMethod(result);
 			
 		} catch (InstantiationException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			//System.out.println("Invalid Command: ");
+			InvalidCritterException except = new InvalidCritterException(critter_class_name);
+			throw except;
 		} catch (IllegalAccessException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			//System.out.println("Invalid Command: ");
+			//throw e;
+			InvalidCritterException except = new InvalidCritterException(critter_class_name);
+			throw except;
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			//System.out.println("Invalid Command: ");
+			//throw e;
+			InvalidCritterException except = new InvalidCritterException(critter_class_name);
+			throw except;
 		}
+		
 		
 		return result;
 	}
@@ -233,9 +245,11 @@ public abstract class Critter {
 	 */
 	static abstract class TestCritter extends Critter {
 		protected void setEnergy(int new_energy_value) {
-			if(new_energy_value == 0) {
+			if(new_energy_value <= 0) {
 				super.energy = 0;
-				population.remove(this);
+				xCoor.remove(indexAll);
+				yCoor.remove(indexAll);
+				population.remove(indexAll);
 			}
 			super.energy = new_energy_value;
 		}
@@ -284,7 +298,7 @@ public abstract class Critter {
 		population.clear();
 	}
 	
-	private static void handleFight(Critter a, Critter b){
+	private static void handleFight(Critter a, Critter b, int aIndex, int bIndex){
 		int aOldX = a.x_coord;
 		int aOldY = a.y_coord;
 		
@@ -314,20 +328,27 @@ public abstract class Critter {
 			
 			if(aRoll > bRoll){
 				a.energy += b.energy/2;
-				population.remove(b);
+				xCoor.remove(bIndex);
+				yCoor.remove(bIndex);
+				population.remove(bIndex);
 			}
 			else if(bRoll > aRoll){
 				b.energy += a.energy/2;
-				population.remove(a);
+				yCoor.remove(aIndex);
+				population.remove(aIndex);
 			}
 			else if(aRoll == bRoll){
 				int ran = getRandomInt(2);
 				if(ran == 0){
 					a.energy += b.energy/2;
-					population.remove(b);
+					xCoor.remove(bIndex);
+					yCoor.remove(bIndex);
+					population.remove(bIndex);
 				}else{
 					b.energy += a.energy/2;
-					population.remove(a);
+					xCoor.remove(aIndex);
+					yCoor.remove(aIndex);
+					population.remove(aIndex);
 				}
 			}
 		}
@@ -336,6 +357,7 @@ public abstract class Critter {
 	public static void worldTimeStep() {
 		for(int i = 0; i<population.size(); i++){
 			Critter thisCritter = population.get(i);
+			indexAll = i;
 			thisCritter.doTimeStep();
 		}
 		
@@ -350,23 +372,27 @@ public abstract class Critter {
 		}
 		
 		for(int i = 0; i<population.size(); i++){
+			indexA = i;
 			Critter aCritter = population.get(i);
 			for(int j = 0; j<population.size(); j++){
+				indexB = j;
 				if(i != j){
 					Critter bCritter = population.get(j);
 					if((aCritter.x_coord == bCritter.x_coord) 
 					&& (aCritter.y_coord == bCritter.y_coord)){
 						//TODO: Make critters fight, remove a dead critter, continue to fight
-						handleFight(aCritter, bCritter);
+						handleFight(aCritter, bCritter, i, j);
 					}
 				}
 			}
 		}
+		
 		for(int i = 0; i < babies.size(); i++) {
 			xCoor.add(babies.get(i).x_coord);
 			yCoor.add(babies.get(i).y_coord);
 		}
 		population.addAll(babies);
+		babies.clear();
 		
 		for(int i = 0; i<population.size(); i++){
 			Critter thisCritter = population.get(i);
@@ -375,6 +401,15 @@ public abstract class Critter {
 				xCoor.remove(i);
 				yCoor.remove(i);
 				population.remove(i);
+			}
+		}
+		
+		for(int i = 0; i < Params.refresh_algae_count; i++) {
+			try {
+				Critter.makeCritter("Algae");
+			} catch (InvalidCritterException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 		}
 	}
