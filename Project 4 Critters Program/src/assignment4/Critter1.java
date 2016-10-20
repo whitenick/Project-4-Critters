@@ -1,11 +1,11 @@
 package assignment4;
 
-public class Horse extends Critter {
+public class Critter1 extends Critter {
 	
 	
 	@Override 
 	public String toString() {
-		return "H";
+		return "1";
 	}
 	
 	private static final int GENE_TOTAL = 24;
@@ -14,7 +14,7 @@ public class Horse extends Critter {
 	private boolean encounter;
 	
 	
-	public Horse() {
+	public Critter1() {
 		for (int k = 0; k < 8; k++) {
 			genes[k] = GENE_TOTAL / 8;
 		}
@@ -25,6 +25,7 @@ public class Horse extends Critter {
 	public boolean fight(String opponent) {
 		
 		if(getEnergy()>100) {
+			encounter = true;
 			return true;
 		}
 		
@@ -43,8 +44,8 @@ public class Horse extends Critter {
 		run(dir);
 		run(dir);
 		
-		if (getEnergy() > 100) {
-			Horse child = new Horse();
+		if (getEnergy() > (Params.start_energy - 20)) {
+			Critter1 child = new Critter1();
 			for (int k = 0; k < 8; k++) {
 				child.genes[k] = this.genes[k];
 			}
@@ -78,12 +79,12 @@ public class Horse extends Critter {
 		int total_right = 0;
 		int total_back = 0;
 		for (Object obj : craigs) {
-			Horse c = (Horse) obj;
+			Critter1 c = (Critter1) obj;
 			total_straight += c.genes[0];
 			total_right += c.genes[1] + c.genes[2] + c.genes[3];
 			total_back += c.genes[4];
 			total_left += c.genes[5] + c.genes[6] + c.genes[7];
-			System.out.println("" + c.getEnergy() + "" + c.encounter);
+			//System.out.println("" + c.getEnergy() + "" + c.encounter);
 		}
 		System.out.print("" + craigs.size() + " total Horses    ");
 		System.out.print("" + total_straight / (GENE_TOTAL * 0.01 * craigs.size()) + "% straight   ");

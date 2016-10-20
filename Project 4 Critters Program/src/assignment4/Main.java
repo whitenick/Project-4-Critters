@@ -29,7 +29,7 @@ public class Main {
     private static String myPackage;	// package of Critter file.  Critter cannot be in default pkg.
     private static boolean DEBUG = false; // Use it or not, as you wish!
     static PrintStream old = System.out;	// if you want to restore output to console
-
+    Critter newHors = new Critter1();
 
     // Gets the package name.  The usage assumes that Critter and its subclasses are all in the same package.
     static {
@@ -118,63 +118,114 @@ public class Main {
         			if(inputScan.hasNextInt()) {
         				seed = inputScan.nextInt();
         			}
+        			else {
+    					System.out.println("error-processing: " + input);
+    				}
         		}
         	
         	
         	
         		else if(inputScan.hasNext("make")) {
         			inputScan.next();
+        			boolean errorFlag = false;
         			if(inputScan.hasNext()) {
         				className = inputScan.next();
-        				if(inputScan.hasNextInt()) {
+        				if(!Character.isUpperCase(className.charAt(0))){
+        					errorFlag = true;
+        					System.out.println("Invalid Critter Class: " + className);
+        				}
+        				if(inputScan.hasNextInt() && errorFlag == false) {
         					count = inputScan.nextInt();
         				}
-        				if (count>0) {
+        				else if(inputScan.hasNext() && (!inputScan.hasNextInt())) {
+        					errorFlag = true;
+        					System.out.println("error-processing: " + input);
+        				}
+        				if(errorFlag != true){
+        					try {
+        						Critter.makeCritter(className);
+        					} catch (InvalidCritterException e) {
+        						System.out.println(e.toString() + " Input: " + input);
+        						errorFlag = true;
+        					}
+        				}
+        			
+        				
+        				if ((count>=1 && (!inputScan.hasNext())) || (errorFlag == false)) {
         					for(int i = 0; i<count; i++) {
         						try {
 									Critter.makeCritter(className);
 								} catch (InvalidCritterException e) {
 									// TODO Auto-generated catch block
-									e.printStackTrace();
+									//e.printStackTrace();
+									System.out.println(e.toString());
+									errorFlag = true;
 								}
         					}
         				}
-        				else {
-        					try {
-								Critter.makeCritter(className);
-							} catch (InvalidCritterException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							}
-        				}
-        			
+        		
+//        				else {
+//        					try {
+//								Critter.makeCritter(className);
+//							} catch (InvalidCritterException e) {
+//								// TODO Auto-generated catch block
+//								System.out.println(e.toString() + "Input: " + input);
+//							}
+//        				}
+//        				else if(!errorFlag) {
+//        					System.out.println("error-processing: " + input);
+//        				}
+        				
         			}
+        			else System.out.println("error-processing: " + input);
         			
         		}
         	
         	
         		else if(inputScan.hasNext("stats")) {
+        			boolean errorFlag = false;
         			inputScan.next();
         			if(inputScan.hasNext()) {
         				className = inputScan.next();
-        				try {
-							critterList = Critter.getInstances(className);
-							//Debug for critterList
-//							for(int i = 0; i<critterList.size(); i++) {
-//								System.out.println(critterList.get(i).toString());
-//							}
-						} catch (InvalidCritterException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
+        				if(!Character.isUpperCase(className.charAt(0))){
+        					errorFlag = true;
+        					System.out.println("Invalid Critter Class: " + className);
+        					//break;
+        				}
+        				if (!errorFlag) {
+							try {
+								critterList = Critter.getInstances(className);
+								//Debug for critterList
+								//							for(int i = 0; i<critterList.size(); i++) {
+								//								System.out.println(critterList.get(i).toString());
+								//							}
+							} catch (InvalidCritterException e) {
+								// TODO Auto-generated catch block
+								//e.printStackTrace();
+								String returnString = e.toString();
+								System.out.println(returnString);
+							} 
 						}
         			}
+        			else{ 
+        				List<Critter> popList = new ArrayList<Critter>();
+        				popList = Critter.runPopulation();
+        				Critter.runStats(popList);
+        				/*for(int i = 0; i<critterList.size(); i++) {
+        					popList = Critter.getInstances(critterList.get(i).toString());
+        				}*/
+        			}
+        				
+        				
+        				
+        				//System.out.println("error-processing: " + input);
         		}
         		
-        		else System.out.println("Invalid input: Try Again");
+        		else System.out.println("error-processing: " + input);
         	
         	}
         	
-        	else System.out.println("Invalid input: Try Again");
+        	else System.out.println("error-processing: " + input);
         	
        
         }
