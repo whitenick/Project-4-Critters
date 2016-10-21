@@ -3,9 +3,9 @@
  * Javier Cortes
  * jc74593
  * 16445
- * <Student2 Name>
- * <Student2 EID>
- * <Student2 5-digit Unique No.>
+ * Nicholas White
+ * NWW295
+ * 16545
  * Slip days used: <0>
  * Fall 2016
  */
