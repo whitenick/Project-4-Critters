@@ -313,16 +313,20 @@ public abstract class Critter {
 		boolean bFight = b.fight(a.toString());
 		
 		if((a.x_coord == b.x_coord) && (a.y_coord == b.y_coord) && (aFight || bFight)){
-			int aRoll;
-			int bRoll;
+			int aRoll = 0;
+			int bRoll = 0;
 			
 			if(aFight){
-				aRoll = getRandomInt(a.energy);
+				if(a.energy > 0){
+					aRoll = getRandomInt(a.energy);
+				}
 			}else
 				aRoll = 0;
 			
 			if(bFight){
-				bRoll = getRandomInt(b.energy);
+				if(b.energy > 0){
+					bRoll = getRandomInt(b.energy);
+				}
 			}else
 				bRoll = 0;
 			
