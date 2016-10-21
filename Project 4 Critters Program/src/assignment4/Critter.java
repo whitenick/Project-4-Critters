@@ -1,12 +1,11 @@
-/* CRITTERS Critter.java
+/* CRITTERS <MyClass.java>
  * EE422C Project 4 submission by
- * Replace <...> with your actual data.
  * Nicholas White
  * NWW295
  * 16545
- * <Student2 Name>
- * <Student2 EID>
- * <Student2 5-digit Unique No.>
+ * Javier Cortes
+ * jc74593
+ * 16445
  * Slip days used: <0>
  * Fall 2016
  */
@@ -120,9 +119,12 @@ public abstract class Critter {
 	}
 	
 	protected final void reproduce(Critter offspring, int direction){
-		offspring.energy = this.energy/2;
-		makeMov(direction);
-		babies.add(offspring);
+		if(this.energy > Params.min_reproduce_energy){
+			offspring.energy = this.energy/2;
+			this.energy /= 2;
+			makeMov(direction);
+			babies.add(offspring);
+		}
 	}
 
 	public abstract void doTimeStep();
@@ -255,10 +257,12 @@ public abstract class Critter {
 		}
 		
 		protected void setX_coord(int new_x_coord) {
+			xCoor.set(indexA, new_x_coord);
 			super.x_coord = new_x_coord;
 		}
 		
 		protected void setY_coord(int new_y_coord) {
+			yCoor.set(indexA, new_y_coord);
 			super.y_coord = new_y_coord;
 		}
 		
@@ -308,11 +312,7 @@ public abstract class Critter {
 		boolean aFight = a.fight(b.toString());
 		boolean bFight = b.fight(a.toString());
 		
-		if(!aFight){
-			
-		}
-		
-		if((a.x_coord == b.x_coord) && (a.y_coord == b.y_coord)){
+		if((a.x_coord == b.x_coord) && (a.y_coord == b.y_coord) && (aFight || bFight)){
 			int aRoll;
 			int bRoll;
 			
@@ -492,28 +492,12 @@ public abstract class Critter {
 				critter = nextCritter(crittersRow);
 				if(critter != null){
 					critterX = critter.x_coord;
-				}else
-					critterX = Params.world_width;
-				
+				}
+				i++;
+			}else if(i < Params.world_width){
+				System.out.print(" ");
 				i++;
 			}
-			else if(i > critterX){
-				critter = nextCritter(crittersRow);
-				if(critter != null){
-					critterX = critter.x_coord;
-				}
-				
-				if(i == critterX){
-					System.out.print(critter);
-					i++;
-				}
-			}
-			
-			if(i < Params.world_width){
-				System.out.print(" ");
-			}
-			
-			i++;
 		}
 		System.out.print("|");
 	}
