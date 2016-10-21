@@ -1,11 +1,11 @@
-/* CRITTERS Main.java
+/* CRITTERS <MyClass.java>
  * EE422C Project 4 submission by
- * Javier Cortes
- * jc74593
- * 16445
  * Nicholas White
  * NWW295
  * 16545
+ * Javier Cortes
+ * jc74593
+ * 16445
  * Slip days used: <0>
  * Fall 2016
  */
@@ -29,7 +29,7 @@ public class Main {
     private static String myPackage;	// package of Critter file.  Critter cannot be in default pkg.
     private static boolean DEBUG = false; // Use it or not, as you wish!
     static PrintStream old = System.out;	// if you want to restore output to console
-    Critter newHors = new Critter1();
+   // Critter newHors = new Critter();
 
     // Gets the package name.  The usage assumes that Critter and its subclasses are all in the same package.
     static {
@@ -117,6 +117,7 @@ public class Main {
         			inputScan.next();
         			if(inputScan.hasNextInt()) {
         				seed = inputScan.nextInt();
+        				Critter.setSeed(seed);
         			}
         			else {
     					System.out.println("error-processing: " + input);
