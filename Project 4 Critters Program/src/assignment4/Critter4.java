@@ -11,7 +11,7 @@ package assignment4;
  * Fall 2016
  */
 
-public class Tiger extends Critter {
+public class Critter4 extends Critter {
 	int dir;
 	boolean encounter;
 	boolean goStraight = true;
@@ -19,7 +19,7 @@ public class Tiger extends Critter {
 	@Override
 	public String toString() { return "T"; }
 	
-	public Tiger(){
+	public Critter4(){
 		dir = Critter.getRandomInt(8);
 	}
 
@@ -28,7 +28,7 @@ public class Tiger extends Critter {
 		run(dir);
 		
 		if(this.getEnergy() > Params.start_energy + 100){
-			Tiger newTiger = new Tiger();
+			Critter4 newTiger = new Critter4();
 			reproduce(newTiger, newTiger.dir);
 		}
 		if(goStraight){
@@ -47,7 +47,7 @@ public class Tiger extends Critter {
 		}
 		
 		if(this.getEnergy() > Params.start_energy + 50){
-			Tiger newTiger = new Tiger();
+			Critter4 newTiger = new Critter4();
 			reproduce(newTiger, newTiger.dir);
 		}
 		
@@ -60,7 +60,7 @@ public class Tiger extends Critter {
 		int total_right = 0;
 		int total_back = 0;
 		for (Object obj : tigers) {
-			Tiger t = (Tiger) obj;
+			Critter4 t = (Critter4) obj;
 			if(t.dir == 2){
 				total_straight++;
 			}else if(t.dir == 1 || t.dir == 0 || t.dir == 7){

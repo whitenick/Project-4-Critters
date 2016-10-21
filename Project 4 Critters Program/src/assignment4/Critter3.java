@@ -11,14 +11,14 @@ package assignment4;
  * Fall 2016
  */
 
-public class Rabbit extends Critter{
+public class Critter3 extends Critter{
 	int dir;
 	boolean encounter;
 	
 	@Override
 	public String toString() { return "R"; }
 	
-	public Rabbit(){
+	public Critter3 (){
 		dir = Critter.getRandomInt(8);
 	}
 
@@ -27,7 +27,7 @@ public class Rabbit extends Critter{
 		run(dir);
 		
 		if(this.getEnergy() > Params.start_energy + 50){
-			Rabbit newRabbit = new Rabbit();
+			Critter3 newRabbit = new Critter3();
 			reproduce(newRabbit, newRabbit.dir);
 		}
 		dir = Critter.getRandomInt(8);
@@ -40,7 +40,7 @@ public class Rabbit extends Critter{
 			return true;
 		}
 		if(this.getEnergy() > Params.start_energy + 20){
-			Rabbit newRabbit = new Rabbit();
+			Critter3 newRabbit = new Critter3();
 			reproduce(newRabbit, newRabbit.dir);
 		}
 		return false;
@@ -52,7 +52,7 @@ public class Rabbit extends Critter{
 		int total_right = 0;
 		int total_back = 0;
 		for (Object obj : rabbits) {
-			Rabbit r = (Rabbit) obj;
+			Critter3 r = (Critter3) obj;
 			if(r.dir == 2){
 				total_straight++;
 			}else if(r.dir == 1 || r.dir == 0 || r.dir == 7){
