@@ -184,7 +184,7 @@ public abstract class Critter {
 				try {
 					craigMethod.invoke(obj, result);
 				} catch (IllegalArgumentException | InvocationTargetException e) {
-					e.printStackTrace();
+					throw new InvalidCritterException(critter_class_name);
 				}
 				
 			} catch (NoSuchMethodException | SecurityException e) {
