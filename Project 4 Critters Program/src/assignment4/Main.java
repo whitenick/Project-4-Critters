@@ -106,6 +106,9 @@ public class Main {
 							Critter.worldTimeStep();
 						}
 					}
+					else if (inputScan.hasNext()){
+						System.out.println("error processing: " + input);
+					}
 					else {
 						Critter.worldTimeStep();
 					}
@@ -115,7 +118,10 @@ public class Main {
 		    		inputScan.next();
 		    		if(inputScan.hasNextInt()){
 		    			seed = inputScan.nextInt();
-		    			Critter.setSeed(seed);
+		    			if(!inputScan.hasNext()){
+		    				Critter.setSeed(seed);
+		    			}else
+		    				System.out.println("error processing: " + input);	
 		    		}
 		    		else{
 		    			System.out.println("error processing: " + input);
@@ -141,15 +147,17 @@ public class Main {
 						}
 		    			
 		    			if(!errorFlag && (count >= 1)){
-		    				for(int i = 0; i<count; i++) {
-								try {
-									Critter.makeCritter(className);
-								} catch (InvalidCritterException e) {
-									System.out.println(e.toString());
-									errorFlag = true;
+		    				if(!inputScan.hasNext()){
+		    					for(int i = 0; i<count; i++) {
+									try {
+										Critter.makeCritter(className);
+									} catch (InvalidCritterException e) {
+										System.out.println(e.toString());
+										errorFlag = true;
+									}
 								}
-							}
-						}else System.out.println("error processing: " + input);
+		    				}else System.out.println("error processing: " + input);
+						}
 		    		}else System.out.println("error processing: " + input);
 		    	}
 		    	else if(inputScan.hasNext("stats")){
@@ -161,7 +169,7 @@ public class Main {
 							errorFlag = true;
 							System.out.println("Invalid Critter Class: " + className);
 						}
-						if (!errorFlag) {
+						if (!errorFlag && !inputScan.hasNext()) {
 							try {
 								critterList = Critter.getInstances(className);
 							} catch (InvalidCritterException e) {
@@ -170,8 +178,7 @@ public class Main {
 							}
 						}
 					}
-				}
-		    	else System.out.println("error processing: " + input);
+				}else System.out.println("error processing: " + input);
 			}else System.out.println("error processing: " + input);
 		}
 		
