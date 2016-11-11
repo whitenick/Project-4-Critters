@@ -1,7 +1,5 @@
 package assignment4;
-/*
- * Do not change this file.
- */
+
 import assignment4.Critter.TestCritter;
 
 public class Algae extends TestCritter {
@@ -13,5 +11,4 @@ public class Algae extends TestCritter {
 	public void doTimeStep() {
 		setEnergy(getEnergy() + Params.photosynthesis_energy_amount);
 	}
-    
 }
