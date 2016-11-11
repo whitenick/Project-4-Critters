@@ -11,7 +11,6 @@
  */
 
 package assignment4; // cannot be in default package
-import java.util.Scanner;
 import java.io.*;
 import java.util.*;
 
@@ -72,166 +71,121 @@ public class Main {
         
         //Code for accepting input on command prompt
         
-        DEBUG = true;
-        
-        while(DEBUG == true) {
-        	List<Critter> critterList = new ArrayList<Critter>();
-        	System.out.print("critters> ");
-        	String input = kb.nextLine();
-        	int count = 0;
-        	int seed = 0;
-        	//DEBUG for critter count
-        	String className = null;
-        	Scanner inputScan = new Scanner (input);
-
-        	
-        	if(inputScan.hasNext()) {
-        		if(inputScan.hasNext("quit")) {
-        			DEBUG = false;
-        		}
-        	
-        	
-        	
-        		else if(inputScan.hasNext("show")) {
-        			Critter.displayWorld();
-        		}
-        	
-        	
-        	
-        		else if(inputScan.hasNext("step")) {
-        			inputScan.next();
-        			if(inputScan.hasNextInt()) {
-        				count = inputScan.nextInt();
-        				for(int i = 0; i<count; i++) {
-        					Critter.worldTimeStep();
-        				}
-        			}
-        			else {
-        				Critter.worldTimeStep();
-        			}
-        		}
-        	
-        	
-        	
-        		else if(inputScan.hasNext("seed")) {
-        			inputScan.next();
-        			if(inputScan.hasNextInt()) {
-        				seed = inputScan.nextInt();
-        				Critter.setSeed(seed);
-        			}
-        			else {
-    					System.out.println("error-processing: " + input);
-    				}
-        		}
-        	
-        	
-        	
-        		else if(inputScan.hasNext("make")) {
-        			inputScan.next();
-        			boolean errorFlag = false;
-        			if(inputScan.hasNext()) {
-        				className = inputScan.next();
-        				if(!Character.isUpperCase(className.charAt(0))){
-        					errorFlag = true;
-        					System.out.println("Invalid Critter Class: " + className);
-        				}
-        				if(inputScan.hasNextInt() && errorFlag == false) {
-        					count = inputScan.nextInt();
-        				}
-        				else if(inputScan.hasNext() && (!inputScan.hasNextInt())) {
-        					errorFlag = true;
-        					System.out.println("error-processing: " + input);
-        				}
-        				if(errorFlag != true){
-        					try {
-        						Critter.makeCritter(className);
-        					} catch (InvalidCritterException e) {
-        						System.out.println(e.toString() + " Input: " + input);
-        						errorFlag = true;
-        					}
-        				}
-        			
-        				
-        				if ((count>=1 && (!inputScan.hasNext())) || (errorFlag == false)) {
-        					for(int i = 0; i<count; i++) {
-        						try {
-									Critter.makeCritter(className);
-								} catch (InvalidCritterException e) {
-									// TODO Auto-generated catch block
-									//e.printStackTrace();
-									System.out.println(e.toString());
-									errorFlag = true;
+        boolean done = false;
+		String input = "";
+		Scanner inputScan = new Scanner (input);
+		
+		while(!done){
+			List<Critter> critterList = new ArrayList<Critter>();
+			System.out.print("critters> ");
+			
+			int count = 1;
+			int seed = 0;
+			//DEBUG for critter count
+			String className = null;
+			
+			input = kb.nextLine();
+			inputScan = new Scanner (input);
+			if(inputScan.hasNext()){
+				if(inputScan.hasNext("quit")){
+		    		done = true;
+		    	}
+		    	
+		    	else if(inputScan.hasNext("show")){
+		    		inputScan.next();
+		    		if(inputScan.hasNext()){
+		    			System.out.println("error processing: " + input);
+		    		}else Critter.displayWorld();
+		    	}
+		    	
+		    	else if(inputScan.hasNext("step")){
+		    		inputScan.next();
+					if(inputScan.hasNextInt()) {
+						count = inputScan.nextInt();
+						for(int i = 0; i<count; i++) {
+							Critter.worldTimeStep();
+						}
+					}
+					else if (inputScan.hasNext()){
+						System.out.println("error processing: " + input);
+					}
+					else {
+						Critter.worldTimeStep();
+					}
+		    	}
+		    	
+		    	else if(inputScan.hasNext("seed")){
+		    		inputScan.next();
+		    		if(inputScan.hasNextInt()){
+		    			seed = inputScan.nextInt();
+		    			if(!inputScan.hasNext()){
+		    				Critter.setSeed(seed);
+		    			}else
+		    				System.out.println("error processing: " + input);	
+		    		}
+		    		else{
+		    			System.out.println("error processing: " + input);
+		    		}
+		    	}
+		    	
+		    	else if(inputScan.hasNext("make")){
+		    		inputScan.next();
+		    		boolean errorFlag = false;
+		    		if(inputScan.hasNext()){
+		    			className = inputScan.next();
+		    			if(!Character.isUpperCase(className.charAt(0))){
+							errorFlag = true;
+							System.out.println("Invalid Critter Class: " + className);
+						}
+		    			
+		    			if(inputScan.hasNextInt() && errorFlag == false) {
+							count = inputScan.nextInt();
+						}
+		    			else if(inputScan.hasNext() && (!inputScan.hasNextInt())) {
+							errorFlag = true;
+							System.out.println("error processing: " + input);
+						}
+		    			
+		    			if(!errorFlag && (count >= 1)){
+		    				if(!inputScan.hasNext()){
+		    					for(int i = 0; i<count; i++) {
+									try {
+										Critter.makeCritter(className);
+									} catch (InvalidCritterException e) {
+										System.out.println(e.toString());
+										errorFlag = true;
+									}
 								}
-        					}
-        				}
-        		
-//        				else {
-//        					try {
-//								Critter.makeCritter(className);
-//							} catch (InvalidCritterException e) {
-//								// TODO Auto-generated catch block
-//								System.out.println(e.toString() + "Input: " + input);
-//							}
-//        				}
-//        				else if(!errorFlag) {
-//        					System.out.println("error-processing: " + input);
-//        				}
-        				
-        			}
-        			else System.out.println("error-processing: " + input);
-        			
-        		}
-        	
-        	
-        		else if(inputScan.hasNext("stats")) {
-        			boolean errorFlag = false;
-        			inputScan.next();
-        			if(inputScan.hasNext()) {
-        				className = inputScan.next();
-        				if(!Character.isUpperCase(className.charAt(0))){
-        					errorFlag = true;
-        					System.out.println("Invalid Critter Class: " + className);
-        					//break;
-        				}
-        				if (!errorFlag) {
+		    				}else System.out.println("error processing: " + input);
+						}
+		    		}else System.out.println("error processing: " + input);
+		    	}
+		    	else if(inputScan.hasNext("stats")){
+		    		boolean errorFlag = false;
+					inputScan.next();
+					if(inputScan.hasNext()) {
+						className = inputScan.next();
+						if(!Character.isUpperCase(className.charAt(0))){
+							errorFlag = true;
+							System.out.println("Invalid Critter Class: " + className);
+						}
+						if (!errorFlag && !inputScan.hasNext()) {
 							try {
 								critterList = Critter.getInstances(className);
-								//Debug for critterList
-								//							for(int i = 0; i<critterList.size(); i++) {
-								//								System.out.println(critterList.get(i).toString());
-								//							}
 							} catch (InvalidCritterException e) {
-								// TODO Auto-generated catch block
-								//e.printStackTrace();
 								String returnString = e.toString();
 								System.out.println(returnString);
-							} 
+							}
 						}
-        			}
-        			else{ 
-        				List<Critter> popList = new ArrayList<Critter>();
-        				popList = Critter.runPopulation();
-        				Critter.runStats(popList);
-        				/*for(int i = 0; i<critterList.size(); i++) {
-        					popList = Critter.getInstances(critterList.get(i).toString());
-        				}*/
-        			}
-        				
-        				
-        				
-        				//System.out.println("error-processing: " + input);
-        		}
-        		
-        		else System.out.println("error-processing: " + input);
-        	
-        	}
-        	
-        	else System.out.println("error-processing: " + input);
-        	
-       
-        }
+					}
+				}else System.out.println("error processing: " + input);
+			}else System.out.println("error processing: " + input);
+		}
+		
+		kb.close();
+		inputScan.close();
         
-        System.out.println("GLHF");
+        //System.out.println("GLHF");
         
         /* Write your code above */
         System.out.flush();
